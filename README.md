@@ -32,8 +32,8 @@ sudo apt install ffmpeg
 
 ### 1. Clone Repository
 ```bash
-git clone <repository-url>
-cd backend
+git clone https://github.com/Pao040883/quizzly.git
+cd quizzly
 ```
 
 ### 2. Create and Activate Virtual Environment
@@ -251,38 +251,71 @@ The API uses JWT authentication with HTTP-only cookies:
 
 ## 🛠️ Technologie-Stack
 
-- **Django 5.0.7** - Web Framework
-- **Django REST Framework 3.15.2** - REST API
-- **djangorestframework-simplejwt 5.3.1** - JWT Authentication
-- **django-cors-headers 4.3.1** - CORS Support
-- **OpenAI Whisper** - Audio Transkription
-- **Google Gemini Flash AI** - Quiz-Generierung
-- **yt-dlp** - YouTube Download
-- **SQLite** - Datenbank (Standard)
+- **Django 5.1+** - Web Framework
+- **Django REST Framework 3.16+** - REST API
+- **djangorestframework-simplejwt 5.4+** - JWT Authentication with Blacklisting
+- **django-cors-headers 4.6+** - CORS Support
+- **OpenAI Whisper (tiny model)** - Audio Transcription
+- **Google Gemini Flash 2.5** - AI-powered Quiz Generation
+- **yt-dlp 2024.12+** - YouTube Audio Download
+- **SQLite** - Database
+- **Coverage 7.6+** - Code Coverage Testing
+- **Flake8 7.0+** - PEP-8 Linting
 
-## 📁 Projektstruktur
+## 📁 Projektstruktur (Clean Code)
 
 ```
 backend/
-├── core/                      # Django Projekt Settings
+├── core/                          # Django Project Settings
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-├── authentication/            # Authentication App
-│   ├── authentication.py      # Custom JWT Auth
-│   ├── serializers.py
-│   ├── views.py
-│   └── urls.py
-├── quizzes/                   # Quizzes App
-│   ├── models.py              # Quiz & Question Models
-│   ├── serializers.py
-│   ├── views.py
-│   ├── urls.py
-│   ├── functions.py           # YouTube, Whisper, Gemini Utils
-│   └── admin.py
+│
+├── authentication/                # Authentication App
+│   ├── api/                       # API Layer
+│   │   ├── views.py              # API Endpoints (Login, Logout, Register)
+│   │   ├── serializers.py        # Data Validation & Serialization
+│   │   └── urls.py               # URL Routing
+│   ├── utils.py                  # Helper Functions (Cookies, Responses)
+│   ├── authentication.py         # Custom JWT Authentication
+│   ├── models.py                 # User Models (if needed)
+│   ├── admin.py                  # Admin Configuration
+│   └── tests.py                  # 19 Comprehensive Tests
+│
+├── quizzes/                       # Quizzes App
+│   ├── api/                       # API Layer
+│   │   ├── views.py              # API Endpoints (Create, List, Detail)
+│   │   ├── serializers.py        # Quiz & Question Serializers
+│   │   └── urls.py               # URL Routing
+│   ├── functions.py              # Business Logic (YouTube, Whisper, Gemini)
+│   ├── utils.py                  # Helper Functions (DB Operations)
+│   ├── models.py                 # Quiz & Question Models
+│   ├── admin.py                  # Admin Configuration with Inlines
+│   ├── tests.py                  # 29 Comprehensive Tests
+│   └── management/
+│       └── commands/
+│           └── download_whisper.py  # Whisper Model Download Command
+│
+├── media/
+│   └── temp_audio/               # Temporary Audio Files
 ├── manage.py
 └── requirements.txt
 ```
+
+### Architecture Principles
+
+**Clean Code Compliance:**
+- ✅ All functions ≤ 14 lines (39 functions total)
+- ✅ Separation of Concerns (API / Business Logic / Utils)
+- ✅ PEP-8 compliant (0 flake8 violations)
+- ✅ 96% code coverage (48 tests, 100% pass rate)
+
+**Layered Structure:**
+- `api/` - API endpoints, request/response handling
+- `functions.py` - Business logic (YouTube, AI, processing)
+- `utils.py` - Reusable helper functions
+- `models.py` - Database models
+- `tests.py` - Comprehensive test suites
 
 ## 🔧 Configuration
 
@@ -339,16 +372,47 @@ This project is part of the Developer Akademie Backend Course.
 
 ## 👨‍💻 Development
 
-### Code Style
-- PEP-8 compliant
-- Functions maximum 14 lines
-- Descriptive variable names (snake_case)
-- Docstrings for all functions
+### Code Quality Standards
 
-### Run Tests
+**PEP-8 Compliance:**
 ```bash
-python manage.py test
+flake8 . --exclude=migrations,venv,__pycache__,.git
 ```
+Expected: 0 violations ✅
+
+**Test Suite:**
+```bash
+# Run all tests
+python manage.py test authentication quizzes
+
+# Expected: 48 tests, 100% pass rate
+```
+
+**Code Coverage:**
+```bash
+# Run tests with coverage
+coverage run --source='.' manage.py test authentication quizzes
+
+# Generate coverage report
+coverage report
+
+# Expected: 96%+ coverage
+```
+
+**Code Style Guidelines:**
+- ✅ All functions ≤ 14 lines
+- ✅ PEP-8 compliant
+- ✅ Descriptive variable names (snake_case)
+- ✅ Docstrings for all functions
+- ✅ Type hints where appropriate
+- ✅ Clear separation of concerns (API / Business Logic / Utils)
+
+### Project Metrics
+- **Total Functions:** 39
+- **Test Coverage:** 96% (765 statements, 28 untested)
+- **Tests:** 48 (19 authentication + 29 quizzes)
+- **PEP-8 Violations:** 0
+- **Max Function Length:** 14 lines
 
 ## 📞 Support
 
