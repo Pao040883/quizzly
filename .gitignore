@@ -33,6 +33,13 @@ db.sqlite3-journal
 /media
 /staticfiles
 
+# Testing & Coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+
 # Environment variables
 .env
 
