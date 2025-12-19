@@ -32,19 +32,19 @@ sudo apt install ffmpeg
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/Pao040883/quizzly.git
-cd quizzly
+git clone https://github.com/Pao040883/quizly.git
+cd quizly
 ```
 
 ### 2. Create and Activate Virtual Environment
 ```bash
-python -m venv venv
+python -m venv .venv
 
 # Windows
-venv\Scripts\activate
+.venv\Scripts\activate
 
 # macOS/Linux
-source venv/bin/activate
+source .venv/bin/activate
 ```
 
 ### 3. Install Dependencies
@@ -52,14 +52,35 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Configure Gemini API Key
-1. Go to: https://aistudio.google.com/app/apikey
-2. Create a free API key
-3. Open `core/settings.py`
-4. Enter your API key:
-```python
-GEMINI_API_KEY = 'your_api_key_here'
+### 4. Configure Environment Variables
+
+#### Copy Environment Template
+```bash
+cp .env.template .env
 ```
+
+#### Edit `.env` Configuration
+Open the newly created `.env` file and configure the following **required** settings:
+
+**1. Generate a SECRET_KEY:**
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+Copy the output and replace `your-secret-key-here-generate-new-one` in `.env`
+
+**2. Add your Gemini API Key:**
+- Go to: https://aistudio.google.com/app/apikey
+- Create a free API key
+- Replace `your-gemini-api-key-here` in `.env`
+
+**Minimal `.env` example:**
+```bash
+SECRET_KEY=django-insecure-abc123xyz...
+DEBUG=True
+GEMINI_API_KEY=AIzaSy...
+```
+
+**Note:** The `.env.template` file contains additional optional settings with defaults documented. Only `SECRET_KEY` and `GEMINI_API_KEY` are required to get started.
 
 ### 5. Run Database Migrations
 ```bash
@@ -164,7 +185,13 @@ Creates a new quiz based on a YouTube URL.
 
 **Authentication:** Required
 
-**Request Body:**
+**Supported URL Formats:**
+- `https://www.youtube.com/watch?v=VIDEO_ID`
+- `https://youtu.be/VIDEO_ID`
+- `https://youtube.com/watch?v=VIDEO_ID`
+- URLs with parameters (`?si=...`, `?t=123`, etc.) are automatically normalized
+
+**Request Body:****
 ```json
 {
   "url": "https://www.youtube.com/watch?v=example"
@@ -255,7 +282,7 @@ The API uses JWT authentication with HTTP-only cookies:
 - **Django REST Framework 3.16+** - REST API
 - **djangorestframework-simplejwt 5.4+** - JWT Authentication with Blacklisting
 - **django-cors-headers 4.6+** - CORS Support
-- **OpenAI Whisper (tiny model)** - Audio Transcription
+- **OpenAI Whisper (base model)** - Audio Transcription
 - **Google Gemini Flash 2.5** - AI-powered Quiz Generation
 - **yt-dlp 2024.12+** - YouTube Audio Download
 - **SQLite** - Database
