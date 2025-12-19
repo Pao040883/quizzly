@@ -191,7 +191,7 @@ Creates a new quiz based on a YouTube URL.
 - `https://youtube.com/watch?v=VIDEO_ID`
 - URLs with parameters (`?si=...`, `?t=123`, etc.) are automatically normalized
 
-**Request Body:****
+**Request Body:**
 ```json
 {
   "url": "https://www.youtube.com/watch?v=example"
@@ -292,7 +292,7 @@ The API uses JWT authentication with HTTP-only cookies:
 ## 📁 Projektstruktur (Clean Code)
 
 ```
-backend/
+quizly/
 ├── core/                          # Django Project Settings
 │   ├── settings.py
 │   ├── urls.py
@@ -328,14 +328,6 @@ backend/
 ├── manage.py
 └── requirements.txt
 ```
-
-### Architecture Principles
-
-**Clean Code Compliance:**
-- ✅ All functions ≤ 14 lines (39 functions total)
-- ✅ Separation of Concerns (API / Business Logic / Utils)
-- ✅ PEP-8 compliant (0 flake8 violations)
-- ✅ 96% code coverage (48 tests, 100% pass rate)
 
 **Layered Structure:**
 - `api/` - API endpoints, request/response handling
@@ -385,9 +377,9 @@ ffmpeg -version
 ```
 
 ### Gemini API Key Error
-Check if the API key is entered in `settings.py`:
-```python
-GEMINI_API_KEY = 'your_api_key_here'
+Check if the API key is configured in your `.env` file:
+```bash
+GEMINI_API_KEY=your-gemini-api-key-here
 ```
 
 ### CORS Errors
